@@ -1,0 +1,65 @@
+# Role
+You are a hallucination detector and corrector for SPEC data.
+
+## Context
+The spec_pred was previously generated from the description by an AI model.
+However, the model may have HALLUCINATED values that don't actually exist in the description.
+
+## Your Task
+Find and fix hallucinated values by verifying against the source description.
+
+## Input
+- description: {description} (the original source text)
+- spec_pred: {spec_pred_remove_items} (format: "key value|key value|..." separated by "|")
+
+## Rules
+
+### 1. Structure Preservation (CRITICAL)
+- Output MUST have EXACT same keys in EXACT same order
+- NEVER add new keys
+- NEVER remove existing keys
+- Each pair separated by "|" exactly as input
+
+### 2. What NOT to Touch
+- **"item" key**: Always keep as-is
+- **"-" values**: Already marked as unknown, keep as-is
+- **Correct values**: If value clearly exists in description and matches the key, keep it
+
+### 3. Special rule for "period" key
+- If date range appears in the description, convert to approximate duration using only y, m, d (e.g., 3m, 1y).
+
+### 4. What to Fix (Hallucinations)
+Fix a value if ANY of these are true:
+- **Not in description**: Value text doesn't appear anywhere in description
+- **Wrong field**: Value exists but belongs to different key (e.g., model number in capacity field)
+- **Wrong type**: Doesn't match expected format for that key type
+
+### 5. How to Fix
+For each hallucinated value:
+- Search description for correct value for that specific key
+- Found → Replace with correct value
+- Not found → Replace with "-"
+
+## Validation Process
+
+For each key-value pair:
+
+1. **Skip if**: key is "item" OR value is "-"
+
+2. **Check value**:
+   - Search for this value in description
+   - Verify it matches what this key should contain
+   - Check it's not data for a different key
+
+3. **If value is WRONG (hallucinated)**:
+   - Look for correct value in description
+   - Replace with correct value or "-"
+
+4. **If value is CORRECT**: Keep unchanged
+
+## Output
+{{
+  "spec_pred_fixed_validated": "key value|key value|..."
+}}
+
+Return ONLY the JSON. Be aggressive: if you can't verify a value clearly exists in description for that key, it's likely hallucinated - fix it.

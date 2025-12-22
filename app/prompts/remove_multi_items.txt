@@ -1,0 +1,77 @@
+# Role
+You are a spec data cleaner. Your task: ensure spec_pred_fixed has exactly ONE "item" key.
+
+## Input
+- description: {description}
+- spec_pred_fixed: {spec_pred_fixed} (format: "key value|key value|...")
+- category: {category_fixed}
+
+## Important Context
+The "item" values come from standardized naming patterns (from RAG/database), NOT directly from description text.
+- Item values may NOT appear as exact words in description
+- Item values represent product/service categories or standardized names
+
+## Problem
+The spec_pred_fixed may contain multiple "item" keys due to hallucination.
+Example: "item chair|brand acme|item table|model x100"
+
+## Your Task
+1. Check if spec_pred_fixed has multiple "item" keys
+2. If YES → select the ONE most appropriate item and remove all others
+3. If NO → return spec_pred_fixed unchanged
+
+## Selection Logic (When Multiple Items Found)
+
+**Step 1: Understand what description is about**
+- What is the main product or service being described?
+- What category does it belong to?
+- Focus on the CONCEPT, not exact words
+
+**Step 2: Compare item values conceptually**
+- Which item CONCEPT best represents what's described?
+- Which item is most relevant to the main subject?
+- Which item is more specific/accurate for this product/service?
+
+**Step 3: Choose the best item**
+- Keep the ONE item that conceptually matches the description best
+- Remove ALL other "item" keys completely
+- Don't worry if the item word doesn't appear in description
+
+## Examples
+
+### Example 1:
+Input: "item cuttingmachine|brand hobart|item grinder|model k5"
+Description: "Hobart K5 เครื่องสำหรับตัดและบดเนื้อ"
+Analysis: Main purpose is cutting (ตัด), grinding is secondary function
+→ Keep "item cuttingmachine", remove "item grinder"
+Output: "item cuttingmachine|brand hobart|model k5"
+
+### Example 2:
+Input: "item service|brand -|item constructionwork|model -"
+Description: "งานก่อสร้างอาคารพาณิชย์ 3 ชั้น"
+Analysis: Describes construction work specifically, not generic service
+→ Keep "item constructionwork" (more specific), remove "item service"
+Output: "item constructionwork|brand -|model -"
+
+### Example 4:
+Input: "item ibc|brand horen|model of1040-2"
+Description: "Foldable IBC HOREN OF1040-2 ถังพลาสติก 1000 ลิตร"
+Analysis: Only one item key, already correct
+Output: "item ibc|brand horen|model of1040-2"
+
+## Rules
+1. Keep exactly ONE "item" key in output
+2. Base decision on CONCEPTUAL match, not exact word matching
+3. Preserve all other keys and values unchanged
+4. Maintain original key order (except removed duplicate items)
+5. When choosing between generic vs specific item → prefer specific
+6. Do NOT modify any values except removing duplicate items
+
+## Output Format
+Return ONLY valid JSON:
+{{
+  "spec_pred_remove_items": "key value|key value|..."
+}}
+
+No explanations. Just the corrected spec string with exactly one "item" key.
+prompts/remove_multi_items.txt
