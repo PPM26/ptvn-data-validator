@@ -74,6 +74,7 @@ async def main(
     input_file: str = "data/extract_false.csv",
     output_file: str = "output/dataset_fixed.csv",
     concurrency: int = CONCURRENCY,
+    post_process: bool = True,
 ):
     root = Path(__file__).resolve().parent.parent
     input_path = root / input_file
@@ -96,6 +97,11 @@ async def main(
 
     print(f"[INFO] Running async fixes with concurrency={concurrency} ...")
     df_fixed = await process_dataframe(df, prompts, concurrency=concurrency)
+
+    if post_process:
+        df_fixed["category"] = df_fixed["category_fixed"]
+        df_fixed["spec_pred"] = df_fixed["spec_pred_fixed"]
+        df_fixed = df_fixed[["description", "category", "spec_pred"]]
 
     print(f"[INFO] Saving to: {output_path}")
     df_fixed.to_csv(output_path, index=False)

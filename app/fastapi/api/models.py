@@ -67,5 +67,13 @@ class ValidateSpecOut(BaseModel):
     spec_pred_fixed_validated: str
 
 
+
+class PostProcessRowOut(BaseModel):
+    description: str
+    category: Optional[str]
+    spec_pred: Optional[str]
+
+
 class BatchFixIn(BaseModel):
     rows: List[RowIn]
+    post_process: bool = True

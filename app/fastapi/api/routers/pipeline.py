@@ -1,9 +1,9 @@
 import asyncio
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Union
 
 from fastapi import APIRouter, Depends, File, Form
 from app.fastapi.api.deps import get_state
-from app.fastapi.api.models import RowIn, FixRowOut, BatchFixIn
+from app.fastapi.api.models import RowIn, FixRowOut, BatchFixIn, PostProcessRowOut
 from app.fastapi.api.state import AppState
 from app.utils.config import CONCURRENCY
 
@@ -31,7 +31,7 @@ async def fix_one_row(payload: RowIn, state: AppState = Depends(get_state)):
     return FixRowOut(**res)
 
 
-@router.post("/fix-batch", response_model=List[FixRowOut])
+@router.post("/fix-batch", response_model=Union[List[FixRowOut], List[PostProcessRowOut]])
 async def fix_batch(payload: BatchFixIn, state: AppState = Depends(get_state)):
     concurrency = CONCURRENCY
     semaphore = asyncio.Semaphore(concurrency)
@@ -48,5 +48,15 @@ async def fix_batch(payload: BatchFixIn, state: AppState = Depends(get_state)):
 
     tasks = [asyncio.create_task(worker(i, r)) for i, r in enumerate(payload.rows)]
     await asyncio.gather(*tasks)
+
+    if payload.post_process:
+        processed_results = []
+        for i, res in enumerate(results):
+            processed_results.append({
+                "description": payload.rows[i].description,
+                "category": res.get("category_fixed"),
+                "spec_pred": res.get("spec_pred_fixed")
+            })
+        return [PostProcessRowOut(**r) for r in processed_results]
 
     return [FixRowOut(**r) for r in results]
