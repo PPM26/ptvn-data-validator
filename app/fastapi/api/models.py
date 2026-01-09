@@ -2,10 +2,15 @@ from pydantic import BaseModel, Field
 from typing import Optional, List
 
 
+
 class RowIn(BaseModel):
     description: str
     spec_pred: Optional[str] = None
     category: Optional[str] = None
+
+
+class SingleRowFixIn(RowIn):
+    post_process: bool = True
 
 
 class FixRowOut(BaseModel):

@@ -3,7 +3,7 @@ from typing import List, Dict, Any, Union
 
 from fastapi import APIRouter, Depends, File, Form
 from app.fastapi.api.deps import get_state
-from app.fastapi.api.models import RowIn, FixRowOut, BatchFixIn, PostProcessRowOut
+from app.fastapi.api.models import RowIn, FixRowOut, BatchFixIn, PostProcessRowOut, SingleRowFixIn
 from app.fastapi.api.state import AppState
 from app.utils.config import CONCURRENCY
 
@@ -21,13 +21,22 @@ def fallback_result(row: Dict[str, Any]) -> Dict[str, Any]:
     }
 
 
-@router.post("/fix-row", response_model=FixRowOut)
-async def fix_one_row(payload: RowIn, state: AppState = Depends(get_state)):
-    row = payload.model_dump()
+@router.post("/fix-row", response_model=Union[FixRowOut, PostProcessRowOut])
+async def fix_one_row(payload: SingleRowFixIn, state: AppState = Depends(get_state)):
+    row = payload.model_dump(exclude={"post_process"})
     try:
         res = await state.fixer.fix_row(row, state.prompts)
     except Exception:
         res = fallback_result(row)
+    
+    if payload.post_process:
+        processed_res = {
+            "description": payload.description,
+            "category": res.get("category_fixed"),
+            "spec_pred": res.get("spec_pred_fixed")
+        }
+        return PostProcessRowOut(**processed_res)
+
     return FixRowOut(**res)
 
 
