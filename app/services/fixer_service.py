@@ -125,6 +125,7 @@ class FixerService:
             rag_categories_list = await self.rag.get_categories_by_query(str(description))
 
         rag_categories_text = ", ".join(rag_categories_list)
+        # print(f"DEBUG: rag_categories_text = {rag_categories_text}")
 
         # ---------------- 3) FIX CATEGORY first using fix_category prompt ----------------
         try:

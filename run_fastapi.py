@@ -28,7 +28,7 @@ for i in tqdm(range(0, len(rows), CHUNK_SIZE), desc="Processing chunks"):
     results.extend(r.json())
 
 # post_process=True results contain description, category, spec_pred.
-if payload.get("post_process", False):
+if payload.get("post_process", True):
     out_df = pd.DataFrame(results)
 #post_process=False results strictly contain fixed outputs, so we need to concat with original df.
 else:
@@ -37,5 +37,5 @@ else:
         axis=1
     )
 
-out_df.to_csv("output/output_fixed_post_process.csv", index=False)
+out_df.to_csv("output/output_recheck.csv", index=False)
 print("Done.")
