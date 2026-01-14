@@ -20,7 +20,7 @@ for i in tqdm(range(0, len(rows), CHUNK_SIZE), desc="Processing chunks"):
 
     payload = {
         "rows": batch,
-        "post_process": True,
+        "post_process": False, # post_process=True results contain description, category, spec_pred.
     }
 
     r = requests.post(URL, json=payload, timeout=600)
@@ -28,7 +28,7 @@ for i in tqdm(range(0, len(rows), CHUNK_SIZE), desc="Processing chunks"):
     results.extend(r.json())
 
 # post_process=True results contain description, category, spec_pred.
-if payload.get("post_process", True):
+if payload.get("post_process", False):
     out_df = pd.DataFrame(results)
 #post_process=False results strictly contain fixed outputs, so we need to concat with original df.
 else:

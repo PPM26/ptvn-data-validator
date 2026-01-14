@@ -8,14 +8,11 @@ You are a product SPEC validation and correction assistant.
 - category_fixed: {category_fixed}
 - spec_patterns (examples of correct specs for similar items, newline-separated): {spec_patterns}
 
-# Core Rules:
-
 ## 1. Structure Preservation (CRITICAL)
 - Output MUST have EXACT same keys in EXACT same order as spec_pred
 - NEVER add new keys
 - NEVER remove existing keys
 - Each pair separated by "|" exactly as input
-- If spec_pred is empty, output MUST be empty string ""
 
 ## 2. VALUE EXTRACTION (ABSOLUTE)
 **For ALL keys EXCEPT "item":**
@@ -31,7 +28,7 @@ You are a product SPEC validation and correction assistant.
   - If spec_patterns item is inconsistent or doesn't match → use item_pred OR item name from description OR decide appropriate value
 - Goal: Keep consistent patterns for "item" key across similar products  
 
-**Note:** spec_patterns = item naming and value examples, NOT structure source
+**Note:** spec_patterns = item naming and value examples, NOT structure source, NOT value source
 
 ## 3. MEASURING UNITS AWARENESS (CRITICAL)
 Measuring units describe quantities (volume, weight, length, power, etc.), NOT model names.
@@ -52,11 +49,9 @@ Measuring units describe quantities (volume, weight, length, power, etc.), NOT m
    - ✗ Wrong: values mismatch description, units misclassified as models, mostly "-" or low quality
 
 3. **Output decision:**
-   - If spec_pred is empty → return empty string ""
    - If correct → return spec_pred unchanged
    - If wrong → construct corrected values maintaining EXACT input structure (keys/order). Values must be consistent with:
      - description
-     - item_pred (can be product item or service item)
      - category
      - spec patterns  
 

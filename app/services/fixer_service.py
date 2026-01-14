@@ -181,6 +181,7 @@ class FixerService:
                 timeout=120,
             )
             spec_after_fix = fix_result.spec_pred_fixed
+            # print(spec_after_fix)
         except asyncio.TimeoutError:
             print(f"[TIMEOUT] fix_spec at row with description={description[:80]}")
             spec_after_fix = original_spec_pred
@@ -240,7 +241,8 @@ class FixerService:
         if final_spec:
             item_extracted = extract_item(final_spec)
         else:
-            item_extracted = pd.NA
+            # item_extracted = pd.NA
+            item_extracted = None
 
         return {
             "item_pred": item_pred,
