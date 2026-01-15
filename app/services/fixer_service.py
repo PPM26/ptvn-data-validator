@@ -5,7 +5,7 @@ import pandas as pd
 
 from app.services.llm_service import LLMService
 from app.services.ragflow_service import RagFlowService
-from app.utils.spec_parser import extract_item
+from app.utils.spec_parser import extract_item, align_spec_keys
 
 
 class FixerService:
@@ -225,6 +225,9 @@ class FixerService:
             final_spec = validate_result.spec_pred_fixed_validated
             # print("=== BEFORE VALIDATE ===", spec_after_remove_items)
             # print("=== AFTER VALIDATE ====", final_spec)
+
+            # ---------------- 7.1) ALIGN keys with original spec_pred to remove extra keys --------
+            final_spec = align_spec_keys(original_spec_pred, final_spec)
         except asyncio.TimeoutError:
             print(f"[TIMEOUT] validate_spec at row with description={description[:80]}")
             final_spec = spec_after_remove_items

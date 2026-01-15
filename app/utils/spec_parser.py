@@ -111,3 +111,25 @@ def clean_missing_values(spec_string: str) -> str:
         out.append(f"{key} {value}")
 
     return "|".join(out)
+
+
+def align_spec_keys(original_spec: str, fixed_spec: str) -> str:
+    """
+    Ensure fixed_spec contains ONLY keys from original_spec, in the same order.
+    Missing keys in fixed_spec will be filled with "-" from original schema.
+    Extra keys in fixed_spec will be removed.
+    """
+    original_dict = parse_spec(original_spec)
+    if not original_dict:
+        return ""
+
+    fixed_dict = parse_spec(fixed_spec)
+
+    aligned_parts = []
+    for key in original_dict.keys():
+        # Use value from fixed_spec if exists, otherwise "-"
+        val = fixed_dict.get(key, "-")
+        aligned_parts.append(f"{key} {val}")
+        
+    return "|".join(aligned_parts)
+

@@ -127,10 +127,10 @@ class LLMService:
         )
         
         # Print raw output for debugging
-        raw_content = result["raw"].content
-        print(f"\n[Description]: {description}")
-        print(f"\n[Spec Pred]: {spec_pred}")
-        print(f"[RAW fix_spec OUTPUT]:\n{raw_content}\n")
+        # raw_content = result["raw"].content
+        # print(f"\n[Description]: {description}")
+        # print(f"\n[Spec Pred]: {spec_pred}")
+        # print(f"[RAW fix_spec OUTPUT]:\n{raw_content}\n")
         
         return result["parsed"]
 

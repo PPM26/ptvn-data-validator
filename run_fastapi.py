@@ -6,7 +6,9 @@ from tqdm import tqdm
 URL = "http://localhost:5500/pipeline/fix-batch"
 CHUNK_SIZE = 50
 
-df = pd.read_csv("demo_dataset/demo1.csv")
+df = pd.read_csv("demo_dataset/full_input_test.csv")
+df = df[150:200]
+# df= pd.read_excel("data/output.xlsx")
 
 cols = ["description", "spec_pred", "category"]
 df[cols] = df[cols].replace({np.nan: None})
@@ -20,7 +22,7 @@ for i in tqdm(range(0, len(rows), CHUNK_SIZE), desc="Processing chunks"):
 
     payload = {
         "rows": batch,
-        "post_process": False, # post_process=True results contain description, category, spec_pred.
+        "post_process": False, # post_process=True results contain description, category, spec_pred(fixed).
     }
 
     r = requests.post(URL, json=payload, timeout=600)

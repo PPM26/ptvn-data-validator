@@ -60,3 +60,9 @@ dist/
 # =========================
 *.bak
 *.tmp
+
+# =========================
+# Datasets / Data
+# =========================
+demo_dataset/full_input_test.csv
+app/data/output.xlsx
