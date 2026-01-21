@@ -53,13 +53,6 @@ Analysis: Describes construction work specifically, not generic service
 → Keep "item constructionwork" (more specific), remove "item service"
 Output: "item constructionwork|brand -|model -"
 
-### Example 3:
-Input: ""
-Description: "Any description"
-Analysis: spec_pred_fixed is empty
-→ Return empty string
-Output: ""
-
 ### Example 4:
 Input: "item ibc|brand horen|model of1040-2"
 Description: "Foldable IBC HOREN OF1040-2 ถังพลาสติก 1000 ลิตร"

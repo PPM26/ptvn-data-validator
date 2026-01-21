@@ -1,0 +1,32 @@
+description,category,spec_pred,item_pred,item_extracted,spec_pred_fixed,category_fixed,spec_changed,category_changed
+"INV.34227
+ค่าขนส่งเอกชนนอกรอบงาน Dove 
+ตำแหน่ง Shelf Divider Lighting, Slim education Bar, Mini Shelf Frame Light",Display Racks,brand -|compartment -|item ชั้นวางของ|material -|model -|numberofshelf -|size -|type -,Shelf Divider Lighting,shelfdividerlighting,brand -|compartment -|item shelfdividerlighting|material -|model -|numberofshelf -|size -|type -,Display Racks,True,False
+(TS) BBTDC ค่าฉีดวัคซีนไข้หวัดใหญ่ ประจำปี2568,Personal Assistance,item บริการสําหรับแคมเปญ,ค่าฉีดวัคซีนไข้หวัดใหญ่,ค่าฉีดวัคซีนไข้หวัดใหญ่,item ค่าฉีดวัคซีนไข้หวัดใหญ่,Personal Assistance,True,False
+ค่าโทรศัพท์สำหรับผู้บริหาร C-Level 8 เลขหมาย ประจำงวดวันที่ 02/04/68 - 01/05/68  Inv.14052-02-50218063676,Corded Telephones,brand -|color -|current -|electricpower -|item tablet|model c-level8|numberofline -|size -|type -|voltage -,ค่าโทรศัพท์,ค่าโทรศัพท์,brand -|color -|current -|electricpower -|item ค่าโทรศัพท์|model c-level8|numberofline -|size -|type -|voltage -,Corded Telephones,True,False
+IN2025-006691 : งานปูกระเบื้องห้องขยะเปียกพื้นที่เพิ่มเติม,Residential Painting Service,item งานทาสี,งานปูกระเบื้อง,บริการปูกระเบื้อง,item บริการปูกระเบื้อง,Residential Painting Service,True,False
+งานรังวัดที่ดิน(กึ่งทางการ) _253288,Other Consulting,item ค่าที่ปรึกษา,งานรังวัดที่ดิน,ค่าที่ปรึกษา,item ค่าที่ปรึกษา,Other Consulting,False,False
+(PY) Operation Charge for MKP : Service Time 8:00 - 22:00 Jan 25 Additional Thai skill Agent for MKP,Contracts,item ค่าบริการคลังสินค้า,Operation Charge,operationcharge,item operationcharge,Contracts,True,False
+SOLEST COMPRESSOR OIP GRADE POE 68 3.785 L,Other Chemicals,brand solest|item น้ํามันคอมเพรสเซอร์|model -|piece -|volume 3.785l,น้ำมันคอมเพรสเซอร์,น้ํามันคอมเพรสเซอร์,brand solest|item น้ํามันคอมเพรสเซอร์|model oipgradepoe68|piece -|volume 3.785l,Other Chemicals,True,False
+(RR)PR001_Payment of EN-TH Translation_RunQueue,Other Business Services,item ค่าเอเจนซี่,EN-TH Translation,en-thtranslation,item en-thtranslation,Other Business Services,True,False
+งานสั่งทำสลัก,Display Racks,brand -|compartment -|item ชั้นวางของ|material -|model -|numberofshelf -|size -|type -,งานสั่งทำสลัก,ชั้นวางของ,brand -|compartment -|item ชั้นวางของ|material -|model -|numberofshelf -|size -|type -,Display Racks,False,False
+ค่าบริการสำนักงาน เดือน มี.ค. 68|ค่าบริการสำนักงาน เดือน มี.ค.68 (11070),Security Guard Services,brand -|careerlevel -|gender -|item ค่าบริการรักษาความปลอดภัย|period 1m|shift -|workingday -|workinghour -,ค่าบริการสำนักงาน,ค่าบริการสำนักงาน,brand -|careerlevel -|gender -|item ค่าบริการสำนักงาน|period 1m|shift -|workingday -|workinghour -,Security Guard Services,True,False
+Comptage Digiware I60 6xI,Thermometer,brand digiware|item เครื่องวัดอุณหภูมิ|model i60|size -|temperaturerange -|type -,Comptage Digiware,เครื่องวัดอุณหภูมิ,brand digiware|item เครื่องวัดอุณหภูมิ|model i60|size -|temperaturerange -|type -,Thermometer,False,False
+เครื่องซักผ้าฝาบน 25 กก. Brand LG,Top-load Washers,brand lg|capacity 25kg|color -|item ผงซักฟอก|model -|numberoftub -,เครื่องซักผ้าฝาบน,เครื่องซักผ้าฝาบน,brand lg|capacity 25kg|color -|item เครื่องซักผ้าฝาบน|model -|numberoftub -,Top-load Washers,True,False
+"Ref.TRA1068-25001691 ค่าเรื่องบิน BKK - ย่างกุ้ง Travel to participate in the opening and organize the Thai Festival & T-Pop star event from June 21-22, 2025 ",Other Business Travel Services,item ค่าฝึกอบรม,ค่าเรื่องบิน,ค่าเดินทางสำหรับธุรกิจ,item ค่าเดินทางสำหรับธุรกิจ,Other Business Travel Services,True,False
+โครงการทำเงิน_Open Showcase_19112,Display Freezers & Fridges,application -|brand -|capacity -|color -|doorstyle -|item ตู้แช่เย็นเปิดหน้า|model -|numberofdoor -|size -,โครงการทำเงิน,ตู้แช่เย็นเปิดหน้า,application -|brand -|capacity -|color -|doorstyle -|item ตู้แช่เย็นเปิดหน้า|model -|numberofdoor -|size -,Display Freezers & Fridges,False,False
+"(AMAZE)
+
+Quo no. 00011363
+Google - SEM (Acquire Seller) + Management fee Media 
+Start Date: 01 Apr 25 - 30 Apr 25 
+
+Total = 40,000.00 
+Vat 7% = 2,800.00 
+Total with vat = 42,800.00 ",Internet Advertising,brand -|item บริการโฆษณาทางอินเทอร์เน็ต|type -,Google SEM,บริการโฆษณาทางอินเทอร์เน็ต,brand google|item บริการโฆษณาทางอินเทอร์เน็ต|type sem(acquireseller)+managementfeemedia,Internet Advertising,True,False
+Lever [660495],Retaining Rings,brand -|item แหวนล็อค|material -|model -|size -|thickness -|type -,Lever,แหวนล็อค,brand -|item แหวนล็อค|material -|model 660495|size -|thickness -|type lever,Retaining Rings,True,False
+ติดตั้งชิงลมข้างโรงเรือน แบบก้างปลา,Roofing Service,item งานหลังคา,ชิงลม,ชิงลม,item ชิงลม,Roofing Service,True,False
+680332 สมัคร ALL member,Plastic Printing,brand -|color -|doublesided -|item งานพิมพ์พลาสติก|material -|model -|numberofcolor -|piece -|size -|thickness -,สมาชิก ALL,งานพิมพ์พลาสติก,brand -|color -|doublesided -|item งานพิมพ์พลาสติก|material -|model 680332|numberofcolor -|piece -|size -|thickness -,Plastic Printing,True,False
+"ค่า Tutor, Tutor NE2 BU Budget SEP 2025; No.68-081",Other Business Services,item การวิจัยตลาด,Tutor,tutor,item tutor,Other Business Services,True,False
+ค่าขนส่งตู้คอนเทนเนอร์ขนาด 20 ฟุต ไป-กลับ กระทุมแบน-ชลบุรี-กระทุมแบน วันที่ 7/4/2023,Tool Cabinets,brand -|caster -|color -|doortype -|item ตู้เก็บเครื่องมือ|material -|model -|numberofdoor -|numberofdrawer -|size 20ft|waterproof -,ค่าขนส่งตู้คอนเทนเนอร์,ตู้เก็บเครื่องมือ,brand -|caster -|color -|doortype -|item ตู้เก็บเครื่องมือ|material -|model -|numberofdoor -|numberofdrawer -|size 20ft|waterproof -,Tool Cabinets,False,False
+Store : Printing Offset ESL on size 10.6X8.5 cm. หมดแล้วหมดเลย,Advertising Boards,brand -|item จอกระดาษอิเล็กทรอนิกส์|model -|size 10.6x8.5cm,Printing Offset ESL,printingoffsetesl,brand -|item printingoffsetesl|model -|size 10.6x8.5cm,Advertising Boards,True,False

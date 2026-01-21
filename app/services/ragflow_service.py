@@ -8,6 +8,8 @@ from app.utils.config import (
     RAGFLOW_API_KEY,
     RAGFLOW_PO_DATASET_IDS,
     TOP_K,
+    RAGFLOW_SIMILARITY_THRESHOLD,
+    RAGFLOW_VECTOR_SIMILARITY_WEIGHT,
 )
 
 
@@ -40,6 +42,8 @@ class RagFlowService:
                 dataset_ids=RAGFLOW_PO_DATASET_IDS,
                 question=question,
                 top_k=top_k,
+                similarity_threshold=RAGFLOW_SIMILARITY_THRESHOLD,
+                vector_similarity_weight=RAGFLOW_VECTOR_SIMILARITY_WEIGHT,
             )
 
         try:
@@ -142,11 +146,13 @@ class RagFlowService:
     # --------- what asked about: Subgroup / ItemDescription / spec ---------
 
     @classmethod
-    def _extract_spec_patterns(cls, retrieval_results: List[Any]) -> List[str]:
+    def _extract_spec_patterns(cls, retrieval_results: List[Any]) -> List[Dict[str, Any]]:
+        # def _extract_spec_patterns(cls, retrieval_results: List[Any]) -> List[str]:
         """
-        Extract spec pattern text from results.
-        - First, try structured fields: spec / "spec" / etc.
-        - If not found, and record looks like the CSV-chunk text  parse it.
+        Extract spec pattern text and similarity scores from results.
+        Returns a list of dicts: {"spec": str, "similarity": float, "vector_similarity": float, "term_similarity": float}
+        # - First, try structured fields: spec / "spec" / etc.
+        # - If not found, and record looks like the CSV-chunk text  parse it.
         """
         patterns = []
 
@@ -182,7 +188,22 @@ class RagFlowService:
                 spec = row_dict.get("spec") or row_dict.get('"spec"')
 
             if spec:
-                patterns.append(str(spec))
+                # patterns.append(str(spec))
+                if isinstance(rec, dict):
+                    row = {
+                        "spec": str(spec),
+                        "similarity": rec.get("similarity"),
+                        "vector_similarity": rec.get("vector_similarity") or rec.get("vector_Similarity"),
+                        "term_similarity": rec.get("term_similarity") or rec.get("term_Similarity"),
+                    }
+                else:
+                    row = {
+                        "spec": str(spec),
+                        "similarity": getattr(rec, "similarity", None),
+                        "vector_similarity": getattr(rec, "vector_similarity", None) or getattr(rec, "vector_Similarity", None),
+                        "term_similarity": getattr(rec, "term_similarity", None) or getattr(rec, "term_Similarity", None),
+                    }
+                patterns.append(row)
 
         return patterns
 
@@ -285,11 +306,31 @@ class RagFlowService:
     async def get_spec_patterns_by_description(self, description: str):
         """Use description as query to get spec patterns."""
         results = await self._retrieve(description or "")
+        # Extract content and scores for debugging
+        # debug_results = [getattr(r, "content", "N/A") for r in results]
+        # print(f"[RAGFLOW DEBUG] description='{description}' results={debug_results}")
+        debug_info = []
+        for r in results:
+            content = getattr(r, "content", "N/A")
+            sim = getattr(r, "similarity", None) or (r.get("similarity") if isinstance(r, dict) else None)
+            debug_info.append(f"{content[:50]}... (sim={sim})")
+        
+        print(f"[RAGFLOW DEBUG] description='{description}' results={debug_info}")
         return self._extract_spec_patterns(results)
 
     async def get_spec_patterns_by_query(self, query: str):
         """Generic: use any query (item_pred, item_pred + category, etc.) to get spec patterns."""
         results = await self._retrieve(query or "")
+        # Extract content and scores for debugging
+        # debug_results = [getattr(r, "content", "N/A") for r in results]
+        # print(f"[RAGFLOW DEBUG] query='{query}' results={debug_results}")
+        debug_info = []
+        for r in results:
+            content = getattr(r, "content", "N/A")
+            sim = getattr(r, "similarity", None) or (r.get("similarity") if isinstance(r, dict) else None)
+            debug_info.append(f"{content[:50]}... (sim={sim})")
+
+        print(f"[RAGFLOW DEBUG] query='{query}' results={debug_info}")
         return self._extract_spec_patterns(results)
 
     async def get_categories_by_query(self, query: str):

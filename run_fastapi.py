@@ -6,9 +6,19 @@ from tqdm import tqdm
 URL = "http://localhost:5500/pipeline/fix-batch"
 CHUNK_SIZE = 50
 
-df = pd.read_csv("demo_dataset/full_input_test.csv")
-df = df[150:200]
+df = pd.read_csv("demo_dataset/test_set.csv")
+# df = df[200:250]
 # df= pd.read_excel("data/output.xlsx")
+
+# False test set
+# rows = [86, 131, 142, 194, 235, 237, 448, 507, 589, 636, 856, 904, 938, 1370, 1408, 4691, 4901, 8105, 8463, 8785, 9997]
+
+# True test set
+rows = [
+    18, 25, 64, 67, 76, 614, 640, 646, 672, 696,
+    728, 737, 886, 4803, 4939, 7328, 7732, 8018, 8090, 9891]
+
+df = df.loc[rows]
 
 cols = ["description", "spec_pred", "category"]
 df[cols] = df[cols].replace({np.nan: None})
@@ -39,5 +49,5 @@ else:
         axis=1
     )
 
-out_df.to_csv("output/output_recheck.csv", index=False)
+out_df.to_csv("output/output_true_case.csv", index=False)
 print("Done.")

@@ -93,7 +93,7 @@ class LLMService:
 
         CORE PRINCIPLES:
         1. Extract values ONLY from the description - never hallucinate or copy from examples
-        2. Use spec_patterns as a reference for value naming styles (especially for "item" key) but don't copy.
+        2. Use spec_patterns (weighted by [Similarity: score]) as a reference for value naming styles (especially for "item" key). Higher score = higher authority.
         3. Distinguish between model codes and measurements with units
         4. Use "-" for missing information, never guess
 
