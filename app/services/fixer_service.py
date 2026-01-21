@@ -163,10 +163,8 @@ class FixerService:
         spec_query = " ".join(spec_query_parts).strip()
 
         if spec_query:
-            # spec_patterns_list = await self.rag.get_spec_patterns_by_query(spec_query)
             spec_patterns_data = await self.rag.get_spec_patterns_by_query(spec_query)
         else:
-            # spec_patterns_list = await self.rag.get_spec_patterns_by_query(str(description))
             spec_patterns_data = await self.rag.get_spec_patterns_by_query(str(description))
 
         # Sort by similarity descending
@@ -179,19 +177,7 @@ class FixerService:
             text = p.get("spec", "")
             spec_patterns_list.append(f"[Similarity: {sim:.4f}] {text}")
 
-        # spec_patterns_list = [p["spec"] for p in spec_patterns_data]
         spec_patterns_text = "\n".join(spec_patterns_list)
-
-        # Capture similarity scores from top result
-        # similarity = None
-        # vector_similarity = None
-        # term_similarity = None
-        # if spec_patterns_data:
-        #     top_res = spec_patterns_data[0]
-        #     similarity = top_res.get("similarity")
-        #     vector_similarity = top_res.get("vector_similarity")
-        #     term_similarity = top_res.get("term_similarity")
-        # print(f"DEBUG: spec_patterns_text = {spec_patterns_text}")  # DEBUG
 
 
         # ---------------- 5) FIX SPEC using fix_spec prompt ----------------
@@ -271,7 +257,6 @@ class FixerService:
         if final_spec:
             item_extracted = extract_item(final_spec)
         else:
-            # item_extracted = pd.NA
             item_extracted = None
 
         return {
@@ -281,7 +266,4 @@ class FixerService:
             "category_fixed": category_fixed,
             "spec_changed": spec_changed,
             "category_changed": category_changed,
-            # "similarity": similarity,
-            # "vector_similarity": vector_similarity,
-            # "term_similarity": term_similarity,
         }
