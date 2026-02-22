@@ -116,40 +116,7 @@ class FixerService:
         except asyncio.TimeoutError:
             print("[TIMEOUT] predict_item")
             item_pred = None
-
-
-        # ---------------- 2) RagFlow categories using item_pred (fallback to desc) ----------------
-        # if item_pred:
-        #     rag_categories_list = await self.rag.get_categories_by_query(item_pred)
-        # else:
-        #     rag_categories_list = await self.rag.get_categories_by_query(str(description))
-
-        # rag_categories_text = ", ".join(rag_categories_list)
-        # print(f"DEBUG: rag_categories_text = {rag_categories_text}")
-
-        # ---------------- 3) FIX CATEGORY first using fix_category prompt ----------------
-        # try:
-        #     category_result = await asyncio.wait_for(
-        #         self.llm.afix_category(
-        #             prompts["fix_category"],
-        #             description=description,
-        #             category=original_category,
-        #             item=item_pred or "",
-        #             rag_categories=rag_categories_text,
-        #         ),
-        #         timeout=60,
-        #     )
-        #     category_fixed = category_result.category_fixed
-        # except asyncio.TimeoutError:
-        #     print("[TIMEOUT] fix_category")
-        #     category_fixed = original_category
-        
-        # if category_fixed is None:
-        #     category_fixed = original_category
-
-        # norm_original_cat = self._normalize_for_compare(original_category)
-        # norm_fixed_cat = self._normalize_for_compare(category_fixed)
-        # category_changed = norm_fixed_cat != "" and (norm_fixed_cat != norm_original_cat)
+            
 
         category_fixed = original_category
         category_changed = False
