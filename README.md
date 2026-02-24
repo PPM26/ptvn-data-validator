@@ -28,6 +28,11 @@ The system processes product descriptions and specifications to:
 
 The system provides two main endpoints to run the data validation and fixing program.
 
+### Run FastAPI Local
+```bash
+uvicorn app.fastapi.main:app --port 5500 --reload
+```
+
 ### 1. Batch Processing Endpoint
 - **URL**: `POST /pipeline/fix-batch`
 - **Description**: Processes multiple rows of data concurrently.
@@ -132,11 +137,6 @@ The fixing logic uses LLM prompts located in `app/prompts/` to perform its tasks
 - **Category Fixing**: Determines the correct category from RAG suggestions
 - **Specification Validation**: Verifies and corrects specs against the description
 - **Multi-Item Removal**: Detects and cleans up mixed item specifications
-
-## Run FastAPI Local
-```bash
-uvicorn app.fastapi.main:app --port 5500 --reload
-```
 
 ### Manual Testing Steps
 1. **Start the API Server**
