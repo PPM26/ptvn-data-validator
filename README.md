@@ -5,25 +5,6 @@ Automated Item Prediction · RAG Category Fixing · Specification Validation · 
 
 This project provides an intelligent data validation and fixing system that leverages Large Language Models (LLMs) and Retrieval-Augmented Generation (RAG) to automatically validate, fix, and enhance product catalog data.
 
-## System Overview
-![System Architecture](system_architecture_image/system_architecture.jpg)
-![Workflow](system_architecture_image/workflow_no_fix_category.jpg)
-
-The system processes product descriptions and specifications to:
-1. **Predict items** from product descriptions using LLM
-2. **Fix categories** based on RAG-retrieved patterns
-3. **Validate and correct specifications** using multi-stage LLM pipelines
-4. **Extract structured data** from unstructured text
-5. **Remove duplicate items** from specifications
-6. **Ensure data quality** through automated validation
-
-### Core Components
-- **FastAPI Server**: REST API endpoints for data processing
-- **Fixer Service**: Orchestrates the data fixing workflow
-- **LLM Service**: Handles LLM interactions for prediction and validation
-- **RagFlow Service**: Retrieves similar patterns from knowledge base
-- **Pipeline**: Batch processing with async concurrency control
-
 ## How to Use (FastAPI Endpoints)
 
 The system provides two main endpoints to run the data validation and fixing program.
@@ -73,6 +54,25 @@ uvicorn app.fastapi.main:app --port 5500 --reload
 ### Other Endpoints
 - **Validation & Fixing**: `POST /item/predict`, `POST /category/fix`, `POST /spec/fix`
 - **Health Monitoring**: `GET /health`
+
+## System Overview
+![System Architecture](system_architecture_image/system_architecture.jpg)
+![Workflow](system_architecture_image/workflow_no_fix_category.jpg)
+
+The system processes product descriptions and specifications to:
+1. **Predict items** from product descriptions using LLM
+2. **Fix categories** based on RAG-retrieved patterns
+3. **Validate and correct specifications** using multi-stage LLM pipelines
+4. **Extract structured data** from unstructured text
+5. **Remove duplicate items** from specifications
+6. **Ensure data quality** through automated validation
+
+### Core Components
+- **FastAPI Server**: REST API endpoints for data processing
+- **Fixer Service**: Orchestrates the data fixing workflow
+- **LLM Service**: Handles LLM interactions for prediction and validation
+- **RagFlow Service**: Retrieves similar patterns from knowledge base
+- **Pipeline**: Batch processing with async concurrency control
 
 ## Project Structure
 ```text
