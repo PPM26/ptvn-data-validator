@@ -12,24 +12,12 @@ class FixerService:
     """
     Workflow (per row):
 
-    0) Predict item from description using LLM → item_pred
-       - store in item_pred column
-
-    1) Use description to query RagFlow → spec_patterns_by_desc (by description)
-
-    2) Use item_pred to query RagFlow → rag_by_item_pred (extra spec patterns by predicted item)
-
-    3) Use fix_spec prompt + spec_patterns_by_desc + rag_by_item_pred + spec_pred
-       - if spec_pred already correct → spec_pred_fixed == original spec_pred
-       - if spec_pred wrong → spec_pred_fixed == corrected spec
-
-    4) Extract item from spec_pred_fixed → item_extracted
-
-    5) Use item_extracted as query to RagFlow → rag_categories
-
-    6) Use fix_category prompt + rag_categories + item_extracted + description + spec_pred_fixed
-       - if category already correct → category_fixed == original
-       - else → corrected category
+    1) Predict item from description -> item_pred
+    2) Build spec_query = "item_pred + category" -> RagFlow spec_patterns
+    3) Fix spec_pred using fix_spec prompt + spec_patterns -> spec_pred_fixed
+    4) Remove multiple 'item' keys -> spec_pred_remove_items
+    5) Validate spec_pred_remove_items with description -> spec_pred_fixed_validated (final_spec)
+    6) Extract item_extracted from spec_pred_fixed_validated
 
     Returns, per row:
         - item_pred
@@ -88,12 +76,10 @@ class FixerService:
         Workflow:
 
         1) Predict item from description -> item_pred
-        2) Use item_pred as RagFlow query -> rag_categories
-        3) Fix category first using fix_category prompt + rag_categories -> category_fixed, category_changed
-        4) Build spec_query = "item_pred + category_fixed" -> RagFlow spec_patterns
-        5) Fix spec_pred using fix_spec prompt + spec_patterns -> spec_pred_fixed, spec_changed
-        6) Remove multiple 'item' keys -> spec_pred_remove_items
-        7) Validate spec_pred_remove_items with description -> spec_pred_fixed_validated (final_spec)
+        2) Build spec_query = "item_pred + category" -> RagFlow spec_patterns
+        3) Fix spec_pred using fix_spec prompt + spec_patterns -> spec_pred_fixed, spec_changed
+        4) Remove multiple 'item' keys -> spec_pred_remove_items
+        5) Validate spec_pred_remove_items with description -> spec_pred_fixed_validated (final_spec)
         6) Extract item_extracted from spec_pred_fixed_validated
         """
         description = row["description"]
@@ -121,7 +107,7 @@ class FixerService:
         category_fixed = original_category
         category_changed = False
 
-        # ---------------- 4) RagFlow spec patterns using "item_pred + category_fixed" ----------------
+        # ---------------- 2) RagFlow spec patterns using "item_pred + category_fixed" ----------------
         spec_query_parts = []
         if category_fixed:
             spec_query_parts.append(str(category_fixed))
@@ -147,7 +133,7 @@ class FixerService:
         spec_patterns_text = "\n".join(spec_patterns_list)
 
 
-        # ---------------- 5) FIX SPEC using fix_spec prompt ----------------
+        # ---------------- 3) FIX SPEC using fix_spec prompt ----------------
         try:
             fix_result = await asyncio.wait_for(
                 self.llm.afix_spec(
@@ -170,7 +156,7 @@ class FixerService:
             spec_after_fix = original_spec_pred
 
         
-        # ---------------- 6) REMOVE Multiple 'item' keys usiing remove_multi_items prompt ----------------
+        # ---------------- 4) REMOVE Multiple 'item' keys usiing remove_multi_items prompt ----------------
         try:
             remove_result = await asyncio.wait_for(
                 self.llm.aremove_multi_items(
@@ -192,7 +178,7 @@ class FixerService:
             spec_after_remove_items = spec_after_fix
 
 
-        # ---------------- 7) VALIDATE spec_pred_fixed against description & clean hallucinated values --------
+        # ---------------- 5) VALIDATE spec_pred_fixed against description & clean hallucinated values --------
         try:
             validate_result = await asyncio.wait_for(
                 self.llm.avalidate_spec(
@@ -206,7 +192,7 @@ class FixerService:
             # print("=== BEFORE VALIDATE ===", spec_after_remove_items)
             # print("=== AFTER VALIDATE ====", final_spec)
 
-            # ---------------- 7.1) ALIGN keys with original spec_pred to remove extra keys --------
+            # ---------------- 5.1) ALIGN keys with original spec_pred to remove extra keys --------
             final_spec = align_spec_keys(original_spec_pred, final_spec)
         except asyncio.TimeoutError:
             print(f"[TIMEOUT] validate_spec at row with description={description[:80]}")
@@ -220,7 +206,7 @@ class FixerService:
         norm_fixed_spec = self._normalize_for_compare(final_spec)
         spec_changed = norm_fixed_spec != "" and (norm_fixed_spec != norm_original_spec)
 
-        # ---------------- 8) Extract item_extracted from FIXED spec ----------------
+        # ---------------- 6) Extract item_extracted from FIXED spec ----------------
         if final_spec:
             item_extracted = extract_item(final_spec)
         else:

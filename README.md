@@ -5,16 +5,28 @@ Automated Item Prediction · RAG Category Fixing · Specification Validation · 
 
 This project provides an intelligent data validation and fixing system that leverages Large Language Models (LLMs) and Retrieval-Augmented Generation (RAG) to automatically validate, fix, and enhance product catalog data.
 
-## How to Use (FastAPI Endpoints)
+## How to Use
 
-The system provides two main endpoints to run the data validation and fixing program.
-
-### Run FastAPI Local
+### 1. Run FastAPI Local Server
+Start the server locally using uvicorn:
 ```bash
 uvicorn app.fastapi.main:app --port 5500 --reload
 ```
 
-### 1. Batch Processing Endpoint
+### 2. Run Batch Processing Script (`run_fastapi.py`)
+To test the batch processing API programmatically, use the included Python script. Make sure the FastAPI server is running first.
+```bash
+python run_fastapi.py
+```
+This script will:
+- Load test data from `demo_dataset/demo.csv`
+- Process rows in batches of 50 against the `POST /pipeline/fix-batch` endpoint
+- Save the processed results to `output/output_demo.csv`
+
+### 3. API Endpoints
+The system provides two main endpoints to run the data validation and fixing program via HTTP requests.
+
+#### Batch Processing Endpoint
 - **URL**: `POST /pipeline/fix-batch`
 - **Description**: Processes multiple rows of data concurrently.
 
@@ -32,7 +44,7 @@ uvicorn app.fastapi.main:app --port 5500 --reload
 }
 ```
 
-### 2. Single Row Processing Endpoint
+#### Single Row Processing Endpoint
 - **URL**: `POST /pipeline/fix-row`
 - **Description**: Processes a single row of data.
 
@@ -78,23 +90,46 @@ The system processes product descriptions and specifications to:
 ```text
 data_validation/
 ├── app/
-│   ├── fastapi/           # FastAPI application
-│   │   ├── api/          # API routes and models
+│   ├── fastapi/          # FastAPI application
+│   │   ├── api/          # API routes, deps, models, and state
+│   │   │   ├── routers/
+│   │   │   │   ├── category.py
+│   │   │   │   ├── health.py
+│   │   │   │   ├── item.py
+│   │   │   │   ├── pipeline.py
+│   │   │   │   └── spec.py
+│   │   │   ├── deps.py
+│   │   │   ├── models.py
+│   │   │   └── state.py
 │   │   └── main.py       # FastAPI app configuration
 │   ├── pipeline/         # Batch processing pipeline
+│   │   ├── pipeline.py
+│   │   └── run_pipeline.py
 │   ├── prompts/          # LLM prompt templates
+│   │   ├── fix_category.txt        # Prompt to fix category
+│   │   ├── fix_spec.txt            # Prompt to fix specification
+│   │   ├── predict_item.txt        # Prompt to predict item from description
+│   │   ├── remove_multi_items.txt  # Prompt to remove duplicate item keys
+│   │   └── validate_spec.txt       # Prompt to validate final specification
 │   ├── services/         # Core services
 │   │   ├── fixer_service.py    # Main fixing workflow
 │   │   ├── llm_service.py      # LLM interactions
 │   │   └── ragflow_service.py  # RAG operations
 │   └── utils/            # Utility functions
+│       ├── config.py
+│       ├── spec_models.py
+│       └── spec_parser.py
 ├── demo_dataset/         # Sample datasets
+│   └── demo.csv
 ├── output/               # Output directory
+├── system_architecture_image/
+│   ├── system_architecture.jpg
+│   └── workflow_no_fix_category.jpg
 ├── Dockerfile            # Container configuration
 ├── docker-compose.yml    # Docker Compose setup
+├── README.md             # Project documentation
 ├── requirements.txt      # Python dependencies
-├── run_fastapi.py        # Example batch processing script
-└── README.md
+└── run_fastapi.py        # Example batch processing script
 ```
 
 ## Workflow: Data Fixing Pipeline
@@ -138,15 +173,4 @@ The fixing logic uses LLM prompts located in `app/prompts/` to perform its tasks
 - **Specification Validation**: Verifies and corrects specs against the description
 - **Multi-Item Removal**: Detects and cleans up mixed item specifications
 
-### Manual Testing Steps
-1. **Start the API Server**
-   Start the server locally using uvicorn as shown above.
-2. **Run Batch Processing Script** (Async)
-   Execute the included sample script:
-   ```bash
-   python run_fastapi.py
-   ```
-   This script:
-   - Loads test data from `demo_dataset/test_set.csv`
-   - Processes rows in batches of 50 against `/pipeline/fix-batch`
-   - Saves results to `output/results.csv`
+
